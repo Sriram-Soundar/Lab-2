@@ -7,6 +7,10 @@ format: html
 embed-resources: true
 ---
 
+```{r setup, include=FALSE} 
+library(reticulate)
+```
+
 # Data Manipulation
 
 ## Q1
