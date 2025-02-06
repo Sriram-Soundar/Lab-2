@@ -6,7 +6,7 @@ subtitle: "Due: 11:59 PM on 2/10/2025"
 format: html
 embed-resources: true
 ---
-Sriram
+Sriram Soundar
 # Data Manipulation
 
 ## Q1
