@@ -1,17 +1,15 @@
 ---
 title: "Lab 2: R, Python, and Git, Oh My!"
-author: "A name"
-date: "A date"
+author: "Steven & Sriram"
+date: "02/06/2025"
 subtitle: "Due: 11:59 PM on 2/10/2025"
 format: html
 embed-resources: true
 ---
-Sriram Soundar
+
 # Data Manipulation
 
 ## Q1
-
-Steven's change
 
 ## Q2
 
