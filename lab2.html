@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
 width: 0.8em;
 margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
 }
+
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+}
+pre.numberSource { margin-left: 3em; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -3082,25 +3116,166 @@ vertical-align: -.125em;
 </header>
 
 
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <section id="data-manipulation" class="level1">
 <h1>Data Manipulation</h1>
 <section id="q1" class="level2">
 <h2 class="anchored" data-anchor-id="q1">Q1</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading in the data and then subsetting it to only keep data from the year 2019.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;vdem_subset.csv&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[data<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2019</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same thing in python, except we can use the r version of the data.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pydata <span class="op">=</span> r.data</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>pydata <span class="op">=</span> pydata[pydata[<span class="st">&quot;year&quot;</span>] <span class="op">==</span> <span class="dv">2019</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="q2" class="level2">
 <h2 class="anchored" data-anchor-id="q2">Q2</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter out NA values and then find the average GDP per capita. Use an ifelse to apply a High or Low label</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="sc">!</span><span class="fu">is.na</span>(data<span class="sc">$</span>e_gdppc), ]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>average_gdp <span class="ot">&lt;-</span> <span class="fu">mean</span>(data<span class="sc">$</span>e_gdppc)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>gdp_cat <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  data<span class="sc">$</span>e_gdppc <span class="sc">&gt;</span> average_gdp,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;High&quot;</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Low&quot;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same thing in python but use the .apply() method to apply a lambda function to the data that will apply the high/low labels</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>pydata <span class="op">=</span> r.data</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>py_average_gdp <span class="op">=</span> r.average_gdp <span class="co"># pydata[&quot;e_gdppc&quot;].mean()</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>pydata[<span class="st">&quot;gdp_cat&quot;</span>] <span class="op">=</span> pydata[<span class="st">&quot;e_gdppc&quot;</span>].<span class="bu">apply</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">lambda</span> x: <span class="st">&quot;High&quot;</span> <span class="cf">if</span> x <span class="op">&gt;</span> py_average_gdp <span class="cf">else</span> <span class="st">&quot;Low&quot;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="q3" class="level2">
 <h2 class="anchored" data-anchor-id="q3">Q3</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the summarise function to find the average electoral democracy rating grouped by the high low label.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>summary <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gdp_cat) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_electdem =</span> <span class="fu">mean</span>(v2x_polyarchy), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  gdp_cat avg_electdem na.rm
+  &lt;chr&gt;          &lt;dbl&gt; &lt;lgl&gt;
+1 High           0.659 TRUE 
+2 Low            0.452 TRUE </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same thing in python but we can use the groupby method to group by and then stack a mean method on top</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>py_summary <span class="op">=</span> pydata.groupby(<span class="st">&quot;gdp_cat&quot;</span>)[<span class="st">&quot;v2x_polyarchy&quot;</span>].mean().reset_index(name<span class="op">=</span><span class="st">&quot;avg_electdem&quot;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(py_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  gdp_cat  avg_electdem
+0    High      0.659048
+1     Low      0.452304</code></pre>
+</div>
+</div>
 </section>
 <section id="q4" class="level2">
 <h2 class="anchored" data-anchor-id="q4">Q4</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use a logical statement to filter countries with high GDP but low electoral democracy rating</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>avg_electdem <span class="ot">&lt;-</span> <span class="fu">mean</span>(data<span class="sc">$</span>v2x_polyarchy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> data[</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  data<span class="sc">$</span>e_gdppc <span class="sc">&gt;</span> average_gdp <span class="sc">&amp;</span> data<span class="sc">$</span>v2x_polyarchy <span class="sc">&lt;</span> avg_electdem,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(filtered_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            country_name year v2x_polyarchy e_gdppc e_regiongeo gdp_cat
+34                Russia 2019         0.268  25.606           4    High
+106          South Sudan 2019         0.174  21.725           8    High
+350                Qatar 2019         0.081  80.190          10    High
+370               Turkey 2019         0.289  23.599          10    High
+402              Belarus 2019         0.257  20.806           4    High
+434              Eritrea 2019         0.070  21.058           8    High
+458           Kazakhstan 2019         0.237  23.827          11    High
+518         Turkmenistan 2019         0.149  25.029          11    High
+538              Bahrain 2019         0.118  30.046          10    High
+582    Equatorial Guinea 2019         0.179  21.076           7    High
+618               Kuwait 2019         0.315  45.010          10    High
+634             Malaysia 2019         0.477  26.265          13    High
+658                 Oman 2019         0.177  21.730          10    High
+674         Saudi Arabia 2019         0.016  33.263          10    High
+686            Singapore 2019         0.383  72.025          13    High
+706 United Arab Emirates 2019         0.095  64.628          10    High
+710              Hungary 2019         0.460  25.834           4    High</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same thing in python</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>py_average_electdem <span class="op">=</span> pydata[<span class="st">&quot;v2x_polyarchy&quot;</span>].mean()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>py_filtered_data <span class="op">=</span> pydata[</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    (pydata[<span class="st">&quot;e_gdppc&quot;</span>] <span class="op">&gt;</span> py_average_gdp) <span class="op">&amp;</span> (pydata[<span class="st">&quot;v2x_polyarchy&quot;</span>] <span class="op">&lt;</span> py_average_electdem)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(py_filtered_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             country_name  year  v2x_polyarchy  e_gdppc  e_regiongeo gdp_cat
+8                  Russia  2019          0.268   25.606            4    High
+26            South Sudan  2019          0.174   21.725            8    High
+87                  Qatar  2019          0.081   80.190           10    High
+92                 Turkey  2019          0.289   23.599           10    High
+100               Belarus  2019          0.257   20.806            4    High
+108               Eritrea  2019          0.070   21.058            8    High
+114            Kazakhstan  2019          0.237   23.827           11    High
+128          Turkmenistan  2019          0.149   25.029           11    High
+131               Bahrain  2019          0.118   30.046           10    High
+142     Equatorial Guinea  2019          0.179   21.076            7    High
+150                Kuwait  2019          0.315   45.010           10    High
+154              Malaysia  2019          0.477   26.265           13    High
+160                  Oman  2019          0.177   21.730           10    High
+164          Saudi Arabia  2019          0.016   33.263           10    High
+167             Singapore  2019          0.383   72.025           13    High
+172  United Arab Emirates  2019          0.095   64.628           10    High
+173               Hungary  2019          0.460   25.834            4    High</code></pre>
+</div>
+</div>
 </section>
 <section id="q5" class="level2">
 <h2 class="anchored" data-anchor-id="q5">Q5</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the correlation between GDP and electoral democracy rating</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>correlation <span class="ot">&lt;-</span> <span class="fu">cor</span>(data<span class="sc">$</span>e_gdppc, data<span class="sc">$</span>v2x_polyarchy, <span class="at">use =</span> <span class="st">&quot;complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(correlation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4239001</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same thing in python</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>py_correlation <span class="op">=</span> pydata[<span class="st">&quot;e_gdppc&quot;</span>].corr(pydata[<span class="st">&quot;v2x_polyarchy&quot;</span>])</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(py_correlation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.4239001395493961</code></pre>
+</div>
+</div>
 </section>
 <section id="q6" class="level2">
 <h2 class="anchored" data-anchor-id="q6">Q6</h2>
+<p>While there is a moderate positive correlation between GDP per capita and electoral democracy ratings, there are many exceptions to this. There are low democracy rating countries that have high GDP per capita and they often are resource rich in oil and have authoritarian/monarchical political systems.</p>
 </section>
 </section>
 

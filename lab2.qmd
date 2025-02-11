@@ -3,24 +3,120 @@ title: "Lab 2: R, Python, and Git, Oh My!"
 author: "Steven & Sriram"
 date: "02/06/2025"
 subtitle: "Due: 11:59 PM on 2/10/2025"
-format: html
+format: pdf
 embed-resources: true
 ---
 
 ```{r setup, include=FALSE} 
 library(reticulate)
+library(tidyverse)
+```
+
+```{python}
+import pandas as pd
 ```
 
 # Data Manipulation
 
 ## Q1
 
+```{r}
+# Reading in the data and then subsetting it to only keep data from the year 2019.
+
+data <- read.csv("vdem_subset.csv")
+data <- data[data$year == 2019, ]
+```
+
+```{python}
+# Same thing in python, except we can use the r version of the data.
+
+pydata = r.data
+pydata = pydata[pydata["year"] == 2019]
+```
+
 ## Q2
+
+```{r}
+# Filter out NA values and then find the average GDP per capita. Use an ifelse to apply a High or Low label
+
+data <- data[!is.na(data$e_gdppc), ]
+
+average_gdp <- mean(data$e_gdppc)
+data$gdp_cat <- ifelse(
+  data$e_gdppc > average_gdp,
+  "High",
+  "Low"
+)
+```
+
+```{python}
+# Same thing in python but use the .apply() method to apply a lambda function to the data that will apply the high/low labels
+
+pydata = r.data
+py_average_gdp = r.average_gdp # pydata["e_gdppc"].mean()
+
+pydata["gdp_cat"] = pydata["e_gdppc"].apply(
+  lambda x: "High" if x > py_average_gdp else "Low"
+)
+
+```
 
 ## Q3
 
+```{r}
+# Use the summarise function to find the average electoral democracy rating grouped by the high low label.
+
+summary <- data %>%
+  group_by(gdp_cat) %>%
+  summarise(avg_electdem = mean(v2x_polyarchy), na.rm = TRUE)
+
+print(summary)
+```
+
+```{python}
+# Same thing in python but we can use the groupby method to group by and then stack a mean method on top
+
+py_summary = pydata.groupby("gdp_cat")["v2x_polyarchy"].mean().reset_index(name="avg_electdem")
+print(py_summary)
+```
+
 ## Q4
+
+```{r}
+# Use a logical statement to filter countries with high GDP but low electoral democracy rating
+
+avg_electdem <- mean(data$v2x_polyarchy, na.rm = TRUE)
+filtered_data <- data[
+  data$e_gdppc > average_gdp & data$v2x_polyarchy < avg_electdem,
+]
+print(filtered_data)
+```
+
+```{python}
+# Same thing in python
+
+py_average_electdem = pydata["v2x_polyarchy"].mean()
+py_filtered_data = pydata[
+    (pydata["e_gdppc"] > py_average_gdp) & (pydata["v2x_polyarchy"] < py_average_electdem)
+]
+print(py_filtered_data)
+```
 
 ## Q5
 
+```{r}
+# Find the correlation between GDP and electoral democracy rating
+
+correlation <- cor(data$e_gdppc, data$v2x_polyarchy, use = "complete.obs", method = "pearson")
+print(correlation)
+```
+
+```{python}
+# Same thing in python
+
+py_correlation = pydata["e_gdppc"].corr(pydata["v2x_polyarchy"])
+print(py_correlation)
+```
 ## Q6
+
+While there is a moderate positive correlation between GDP per capita and electoral democracy ratings, there are many exceptions to this. There are low democracy rating countries that have high GDP per capita and they often are resource rich in oil and have authoritarian/monarchical political systems.
